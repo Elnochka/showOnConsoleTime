@@ -13,51 +13,20 @@ import java.util.ResourceBundle;
 public class ShowTimeImpl implements ShowTime{
     private static final Logger LOGGER = LoggerFactory.getLogger(ShowTimeImpl.class);
 
-    private Locale currentLocale = Locale.getDefault();
-    private ResourceBundle resourceBundle;
     private int hours;
-
-    public ShowTimeImpl(Locale currentLocale){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
-        this.hours = cal.get(Calendar.HOUR_OF_DAY);
-        this.currentLocale = currentLocale;
-        this.resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
-
-    }
 
     public ShowTimeImpl(){
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
         this.hours = cal.get(Calendar.HOUR_OF_DAY);
-        this.resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
-
     }
 
     public ShowTimeImpl(int hours) {
         this.hours = hours;
-        this.resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
-    }
-
-    public ShowTimeImpl(Locale currentLocale, int hours) {
-        this.currentLocale = currentLocale;
-        this.hours = hours;
-    }
-
-    public int getHours() {
-        return hours;
-    }
-
-    public Locale getCurrentLocale() {
-        return currentLocale;
-    }
-
-    public ResourceBundle getResourceBundle() {
-        return resourceBundle;
     }
 
     @Override
-    public String findTimeOfDay() {
+    public String findTimeOfDay(Locale currentLocale) {
         LOGGER.info("Find time of day.");
         String timeOfDay = "";
 
@@ -106,12 +75,13 @@ public class ShowTimeImpl implements ShowTime{
 
         }
         LOGGER.info("Create: Good " + timeOfDay + ", World!");
-        return printLocale(timeOfDay);
+        return printLocale(timeOfDay, currentLocale);
     }
 
     @Override
-    public String printLocale(String timeOfDay) {
+    public String printLocale(String timeOfDay, Locale currentLocale) {
         LOGGER.info("Print for current locale.");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("messages", currentLocale);
         String result = "";
         if(currentLocale.getLanguage().equals("ru")) {
             try {
